@@ -5,10 +5,12 @@ This Python script is meant to be used with Kismet and its built-in tool kismetd
 Change the directory in the script to where you have your .kismet-files saved:
 ```
 os.chdir('PATH/TO/DIRECTORY')
-´´´
+```
 
 Links to Kismet Wireless:
 ```
-    - https://www.kismetwireless.net/
-    - https://github.com/kismetwireless
-´´´
+https://www.kismetwireless.net/
+```
+```
+https://github.com/kismetwireless
+```
