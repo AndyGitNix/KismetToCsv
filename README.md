@@ -8,9 +8,5 @@ os.chdir('PATH/TO/DIRECTORY')
 ```
 
 Links to Kismet Wireless:
-```
-https://www.kismetwireless.net/
-```
-```
-https://github.com/kismetwireless
-```
+- https://www.kismetwireless.net/
+- https://github.com/kismetwireless
