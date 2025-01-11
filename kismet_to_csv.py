@@ -1,10 +1,11 @@
 # Author: AndyGitNix
-# Version: 0.2
+# Version: 0.3
 
 import os
 import pandas as pd
 
-os.chdir('/PATH/TO/FOLDER')                     # Path to where .kismet log-files are stored
+
+os.chdir('/PATH/TO/DIRECTORY')                     # Path to where .kismet log-files are stored
 number = 1
 file_exists = True
 csv_name = ''
@@ -14,6 +15,9 @@ file_parts = []
 for file in files:
     file_parts.append([os.path.splitext(file)[0], os.path.splitext(file)[1]])
 
+
+# Begin the script. Ask for name of the final csv-file.
+
 def main(file_parts):
     if len(file_parts) == 0:
         print('The folder has no files. Exiting...')
@@ -21,7 +25,7 @@ def main(file_parts):
     else:
         csv_name = input('Name the csv-file you want to export the kismet-files to:\n> ')
         if type(csv_name) != str:
-            print('Name is not valid. Try again')
+            print('Name is not valid. Try again. Exiting...')
             quit()
         return csv_name
 
@@ -46,6 +50,7 @@ def csv_check(file_parts):
             csv_exists = input('There is previous .csv-files in your directory. They will be combined to the finished file.\nDo you want to continue anyway? Yes/No? [y/n] ')
 
             if csv_exists.lower().strip() != 'y':
+                print('Exiting...')
                 quit()
             break
 
@@ -58,13 +63,13 @@ def to_csv(file_parts, file_exists, number, csv_name):
 
         if f_ext == '.kismet':
             while (file_exists == True):
-                if os.path.exists('{}_{}.csv'.format(csv_name, number)):
-                    print('File named {}_{}.csv already exists. Renaming...'.format(csv_name, number))
+                if os.path.exists('{}%{}.csv'.format(csv_name, number)):
+                    print('File named {}%{}.csv already exists. Renaming...'.format(csv_name, number))
                     number += 1
                 else:
                     file_exists = False
 
-            command = 'kismetdb_to_wiglecsv --in {}{} --out {}_{}.csv'.format(f_name, f_ext, csv_name, number)
+            command = 'kismetdb_to_wiglecsv --in {}{} --out {}%{}.csv'.format(f_name, f_ext, csv_name, number)
             print('Executing command: ' + command)
             os.system(command)
             number += 1
@@ -97,7 +102,23 @@ def combine_csv(csv_name):
     print(f"Combined CSV saved as {csv_name}.csv")
 
 
-# def remove_csv():
+# Ask to remove excess csv-files that are created in the process.
+
+def remove_csv():
+
+    remove = input('Do you want to remove the excess csv-files? [y/n] ')
+
+    if remove.lower().strip() == 'y':
+
+        for file in os.listdir():
+            f_name, f_ext = os.path.splitext(file)
+
+            if '%' in f_name and f_ext == '.csv':
+                print('File {}{} removed'.format(f_name, f_ext))
+                os.remove(file)
+            else:
+                continue
+        
 
 if __name__ == '__main__':
     csv_name = main(file_parts)
@@ -105,3 +126,4 @@ if __name__ == '__main__':
     csv_check(file_parts)
     to_csv(file_parts, file_exists, number, csv_name)
     combine_csv(csv_name)
+    remove_csv()

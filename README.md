@@ -9,7 +9,7 @@ pip install pandas
 
 Change the directory in the script to where you have your .kismet-files saved (absolute path):
 ```
-os.chdir('PATH/TO/DIRECTORY')
+os.chdir('/PATH/TO/DIRECTORY')
 ```
 
 Run the code with:
