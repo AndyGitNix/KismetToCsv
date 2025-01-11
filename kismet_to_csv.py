@@ -5,7 +5,7 @@ import os
 import pandas as pd
 
 
-os.chdir('/PATH/TO/DIRECTORY')                     # Path to where .kismet log-files are stored
+os.chdir('/PATH/TO/DIRECTORY')                     # Absolute path to where .kismet log-files are stored
 number = 1
 file_exists = True
 csv_name = ''
@@ -23,7 +23,7 @@ def main(file_parts):
         print('The folder has no files. Exiting...')
         quit()
     else:
-        csv_name = input('Name the csv-file you want to export the kismet-files to:\n> ')
+        csv_name = input('\nName the csv-file you want to export the kismet-files to:\n-> ')
         if type(csv_name) != str:
             print('Name is not valid. Try again. Exiting...')
             quit()
@@ -70,7 +70,7 @@ def to_csv(file_parts, file_exists, number, csv_name):
                     file_exists = False
 
             command = 'kismetdb_to_wiglecsv --in {}{} --out {}%{}.csv'.format(f_name, f_ext, csv_name, number)
-            print('Executing command: ' + command)
+            print('> Executing command: ' + command)
             os.system(command)
             number += 1
 
@@ -102,23 +102,29 @@ def combine_csv(csv_name):
     print(f"Combined CSV saved as {csv_name}.csv")
 
 
-# Ask to remove excess csv-files that are created in the process.
+# Ask to remove excess files that are created in the process or kismet files.
 
-def remove_csv():
+def remove_files(filetype, protected_csv_name=None):
 
-    remove = input('Do you want to remove the excess csv-files? [y/n] ')
+    remove = input(f'Do you want to remove {filetype} files? [y/n] ').strip().lower()
 
-    if remove.lower().strip() == 'y':
-
+    if remove == 'y':
         for file in os.listdir():
             f_name, f_ext = os.path.splitext(file)
 
-            if '%' in f_name and f_ext == '.csv':
-                print('File {}{} removed'.format(f_name, f_ext))
-                os.remove(file)
-            else:
+            # Skip the combined CSV file
+            if protected_csv_name and f_name == protected_csv_name and f_ext == '.csv':
                 continue
+
+            # Remove files matching the target extension
+            if f_ext == filetype:
+                print(f'> Removing file: {file}')
+                os.remove(file)
+
+    print(f'All excess {filetype} files have been processed.')
+
         
+# Laucnh the script
 
 if __name__ == '__main__':
     csv_name = main(file_parts)
@@ -126,4 +132,5 @@ if __name__ == '__main__':
     csv_check(file_parts)
     to_csv(file_parts, file_exists, number, csv_name)
     combine_csv(csv_name)
-    remove_csv()
+    remove_files('.csv', protected_csv_name=csv_name)
+    remove_files('.kismet')

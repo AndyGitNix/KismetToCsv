@@ -12,6 +12,11 @@ Change the directory in the script to where you have your .kismet-files saved (a
 os.chdir('/PATH/TO/DIRECTORY')
 ```
 
+Give the script rights to execute
+```
+sudo chmod +x kismet_to_csv.py
+```
+
 Run the code with:
 ```
 python3 kismet_to_csv.py
