@@ -1,6 +1,10 @@
 # Author: AndyGitNix
 # Version: 0.3
 
+# TODO:
+#   -  Protect the .csv files that already exist in directory.
+#   -  Fix header row to be taken from csv file. Then shows correct version details.
+
 import os
 import pandas as pd
 
