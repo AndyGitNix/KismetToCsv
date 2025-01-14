@@ -1,12 +1,12 @@
 # Author: AndyGitNix
-# Version: 0.3
+# Version: 0.4
 
 # TODO:
 #   -  Protect the .csv files that already exist in directory.
-#   -  Fix header row to be taken from csv file. Then shows correct version details.
 
 import os
 import pandas as pd
+import csv
 
 
 os.chdir('/PATH/TO/DIRECTORY')                     # Absolute path to where .kismet log-files are stored
@@ -85,7 +85,25 @@ def combine_csv(csv_name):
 
     print('Combining csv files...')
 
-    header = "WigleWifi-1.4,appRelease=Kismet2024120,model=Kismet,release=2024.12.0.8,device=kismet,display=kismet,board=kismet,brand=kismet"
+    # Attempt to find a header row from any CSV file in the directory.
+
+    header = ""                 # "WigleWifi-1.4,appRelease=Kismet2024120,model=Kismet,release=2024.12.0.8,device=kismet,display=kismet,board=kismet,brand=kismet"
+    header_found = False
+
+    for file in os.listdir(os.getcwd()):
+        if file.endswith('.csv'):
+            with open(file, newline='') as f:
+                csv_reader = csv.reader(f)
+                header = next(csv_reader, None)
+                if header and len(header) > 1:
+                    header = ",".join(header)
+                    header_found = True
+                    break
+
+    if not header_found:
+        raise ValueError("No valid header found in the CSV files.")
+
+    # Combine CSV files into one.
 
     dataframes = []
 
