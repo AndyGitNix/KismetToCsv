@@ -1,8 +1,5 @@
 # Author: AndyGitNix
-# Version: 0.4
-
-# TODO:
-#   -  Protect the .csv files that already exist in directory.
+# Version: 0.5
 
 import os
 import pandas as pd
@@ -13,11 +10,13 @@ os.chdir('/PATH/TO/DIRECTORY')                     # Absolute path to where .kis
 number = 1
 file_exists = True
 csv_name = ''
-
 files = os.listdir()
+protected_files = []
 file_parts = []
 for file in files:
-    file_parts.append([os.path.splitext(file)[0], os.path.splitext(file)[1]])
+    file_parts.append([os.path.splitext(file)[0], os.path.splitext(file)[1]])   # Append filename and extension to a list
+    if file.endswith('.csv'):
+        protected_files.append(os.path.splitext(file)[0])                       # List of CSV files that existed in the directory beforehand. Will not be removed if you choose to remove excess CSV files in the end of the script.
 
 
 # Begin the script. Ask for name of the final csv-file.
@@ -134,8 +133,10 @@ def remove_files(filetype, protected_csv_name=None):
         for file in os.listdir():
             f_name, f_ext = os.path.splitext(file)
 
-            # Skip the combined CSV file
+            # Skip the combined CSV file and the protected CSV files
             if protected_csv_name and f_name == protected_csv_name and f_ext == '.csv':
+                continue
+            if f_name in protected_files:
                 continue
 
             # Remove files matching the target extension
