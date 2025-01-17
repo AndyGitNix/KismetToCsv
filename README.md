@@ -6,6 +6,7 @@ Requirements:
 ```
 pip install pandas
 ```
+Copy the Python script to your wardrivinig machine and name it accordingly.
 
 Change the directory in the script to where you have your .kismet-files saved (absolute path):
 ```
